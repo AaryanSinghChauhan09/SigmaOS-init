@@ -1,0 +1,17 @@
+[package]
+name = "sigmaos-init"
+version = "0.1.0"
+edition = "2021"
+authors = ["SigmaOS Project"]
+description = "System initialization and init system"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/AaryanSinghChauhan09/SigmaOS-init"
+readme = "README.md"
+keywords = ["init", "systemd", "service"]
+categories = ["os"]
+
+[dependencies]
+sigmaos-kernel = { version = "0.1", path = "../SigmaOS-kernel" }
+
+[profile.release]
+opt-level = 3
