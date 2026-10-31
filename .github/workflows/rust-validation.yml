@@ -1,0 +1,55 @@
+name: Rust validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: SigmaOS-init
+      - name: Validate manifest and README
+        run: |
+          python3 - <<'PY'
+          import pathlib, tomllib
+          root = pathlib.Path("SigmaOS-init")
+          manifest = tomllib.loads((root / "Cargo.toml").read_text())
+          assert manifest.get("package", {}).get("name"), "Cargo package name is missing"
+          readme = manifest.get("package", {}).get("readme", "README.md")
+          assert (root / readme).is_file(), f"README not found: {readme}"
+          assert (root / "src" / "lib.rs").is_file(), "src/lib.rs is missing"
+          PY
+
+  compile:
+    needs: manifest
+    runs-on: ubuntu-latest
+    env:
+      SIGMAOS_REPO_TOKEN: ${{ secrets.SIGMAOS_REPO_TOKEN }}
+    steps:
+      - name: Explain skipped compile check
+        if: ${{ env.SIGMAOS_REPO_TOKEN == '' }}
+        run: echo "::notice::Set SIGMAOS_REPO_TOKEN with read access to private SigmaOS path dependencies to enable cargo check."
+      - uses: actions/checkout@v4
+        if: ${{ env.SIGMAOS_REPO_TOKEN != '' }}
+        with:
+          path: SigmaOS-init
+      - uses: actions/checkout@v4
+        if: ${{ env.SIGMAOS_REPO_TOKEN != '' }}
+        with:
+          repository: AaryanSinghChauhan09/SigmaOS-kernel
+          path: SigmaOS-kernel
+          token: ${{ secrets.SIGMAOS_REPO_TOKEN }}
+      - uses: dtolnay/rust-toolchain@stable
+        if: ${{ env.SIGMAOS_REPO_TOKEN != '' }}
+      - name: Check library
+        if: ${{ env.SIGMAOS_REPO_TOKEN != '' }}
+        run: cargo check --manifest-path SigmaOS-init/Cargo.toml --lib
+
