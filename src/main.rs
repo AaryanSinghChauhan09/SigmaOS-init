@@ -1,3 +1,4 @@
+use std::env;
 //! SigmaOS-init - SigmaOS Component CLI
 //!
 //! Command-line interface for SigmaOS-init component.
@@ -37,7 +38,7 @@ enum Commands {
     },
 }
 
-fn main() -> Result<()> {
+fn main() -> Result<()> { -> Result<()> {
     let cli = Cli::parse();
     
     let config = Config::default();
@@ -88,4 +89,19 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+#[derive(Debug, Clone)]
+struct Config {
+    verbose: bool,
+    dry_run: bool,
+}
+
+impl Config {
+    fn from_env() -> Self {
+        Config {
+            verbose: env::var("VERBOSE").is_ok(),
+            dry_run: env::var("DRY_RUN").is_ok(),
+        }
+    }
 }
