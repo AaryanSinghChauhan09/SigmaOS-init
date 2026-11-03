@@ -4,4 +4,6 @@
 pub mod init;
 pub mod systemd;
 
-pub use init::InitSystem;
+pub use init::SigmaInit as InitSystem;
+pub use init::*;
+pub use systemd::*;
