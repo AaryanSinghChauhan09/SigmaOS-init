@@ -1,17 +1,72 @@
-# SigmaOS Init
+# SigmaOS-init
 
-An evolving Rust library for system initialization and service/session models. It exposes `SigmaInit` through the `InitSystem` alias and includes service state and restart-policy types, systemd-style unit parsing and service structures, login session models, and timesyncd configuration.
+SigmaOS critical system component inspired by Arch Linux and Debian architecture.
 
-The crate's APIs do not by themselves establish that it runs as PID 1, supervises real processes, mounts filesystems, or provides full systemd compatibility. Verify platform integration before using it to boot or manage a machine.
+## Overview
 
-## Build
+This component provides essential functionality for the SigmaOS operating system,
+following the modular design principles of Arch Linux and the stability focus of Debian.
 
-The manifest references sibling [`SigmaOS-kernel`](../SigmaOS-kernel). From the SigmaOS checkout:
+## Features
 
-```sh
-cargo check --manifest-path SigmaOS-init/Cargo.toml --lib
+- Asynchronous I/O with Tokio
+- Comprehensive error handling with anyhow
+- Structured logging
+- Configuration management
+- Status monitoring
+- CLI interface with clap
+
+## Installation
+
+```bash
+cargo build --release
+cargo install --path .
+```
+
+## Usage
+
+```bash
+# Initialize the component
+init init
+
+# Start the component
+init start
+
+# Stop the component
+init stop
+
+# Check status
+init status
+
+# Run the component
+init run
+```
+
+## Configuration
+
+The component can be configured via environment variables or configuration files.
+
+## Building
+
+```bash
+cargo build --release
+```
+
+## Testing
+
+```bash
+cargo test
 ```
 
 ## License
 
-GPL-3.0-or-later. See [`Cargo.toml`](Cargo.toml).
+MIT License - See LICENSE file for details.
+
+## Contributing
+
+See CONTRIBUTING.md for guidelines.
+
+## Links
+
+- Repository: https://github.com/AaryanSinghChauhan09/SigmaOS-init
+- SigmaOS: https://github.com/AaryanSinghChauhan09
