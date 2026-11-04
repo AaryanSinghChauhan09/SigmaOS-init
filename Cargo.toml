@@ -1,18 +1,17 @@
 [package]
-name = "init"
+name = "sigmaos-component"
 version = "0.1.0"
 edition = "2021"
-description = "SigmaOS SigmaOS-init component - Critical system infrastructure"
-license = "MIT"
-repository = "https://github.com/AaryanSinghChauhan09/SigmaOS-init"
+authors = ["SigmaOS Team"]
+license = "MIT OR Apache-2.0"
+description = "SigmaOS component following engineering principles"
 
 [dependencies]
-toml = "0.8"
-clap = { version = "4.5", features = ["derive"] }
-tokio = { version = "1.35", features = ["full"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-log = "0.4"
-env_logger = "0.11"
 anyhow = "1.0"
 thiserror = "1.0"
+log = "0.4"
+env_logger = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+
+[dev-dependencies]

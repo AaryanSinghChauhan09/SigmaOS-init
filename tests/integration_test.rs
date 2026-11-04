@@ -1,45 +1,32 @@
-//! Integration tests for SigmaOS-init
+use anyhow::Result;
 
 #[cfg(test)]
 mod tests {
-    use anyhow::Result;
+    use super::*;
 
     #[test]
-    fn test_component_initialization() -> Result<()> {
+    fn test_basic_functionality() -> Result<()> {
         // Arrange
-        let config = "test-config";
+        let config = Config::default();
         
         // Act
-        let result = true;
+        let result = config.process();
         
         // Assert
-        assert!(result, "Component should initialize successfully");
+        assert!(result.is_ok());
         Ok(())
     }
 
     #[test]
-    fn test_component_configuration() -> Result<()> {
+    fn test_error_handling() -> Result<()> {
         // Arrange
-        let config = "test-config";
+        let invalid_config = Config::new("invalid");
         
         // Act
-        let result = true;
+        let result = invalid_config.process();
         
         // Assert
-        assert!(result, "Component should configure successfully");
-        Ok(())
-    }
-
-    #[test]
-    fn test_component_execution() -> Result<()> {
-        // Arrange
-        let input = "test-input";
-        
-        // Act
-        let result = true;
-        
-        // Assert
-        assert!(result, "Component should execute successfully");
+        assert!(result.is_err());
         Ok(())
     }
 }
