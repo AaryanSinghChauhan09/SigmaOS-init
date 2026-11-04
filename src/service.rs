@@ -20,7 +20,6 @@ impl Service {
             error!("Service already running");
             return Err(crate::error::ComponentError::RuntimeError("Service already running".to_string()).into());
         }
-        
         info!("Starting service");
         self.config.process()?;
         self.running = true;
@@ -32,7 +31,6 @@ impl Service {
             error!("Service not running");
             return Err(crate::error::ComponentError::RuntimeError("Service not running".to_string()).into());
         }
-        
         info!("Stopping service");
         self.running = false;
         Ok(())

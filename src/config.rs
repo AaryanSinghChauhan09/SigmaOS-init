@@ -44,7 +44,6 @@ impl Config {
         if !self.enabled {
             return Ok(());
         }
-        
         log::info!("Processing with log level: {}", self.log_level);
         Ok(())
     }
