@@ -1,12 +1,22 @@
-//! SigmaOS-init - SigmaOS Component
+//! SigmaOS-init - System Init & Process Supervisor for SigmaOS
 //!
 //! Critical system infrastructure component for SigmaOS,
-//! inspired by Arch Linux and Debian architecture.
+//! inspired by Debian and Arch Linux architecture.
+
+#![allow(dead_code)]
+
+pub mod config;
+pub mod error;
+pub mod service;
 
 use anyhow::Result;
-use log::{info, error};
+use log::info;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
+
+pub use config::Config as InitConfig;
+pub use error::{ComponentError, Result as ComponentResult};
+pub use service::Service;
 
 /// Component configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -37,7 +47,7 @@ pub trait Component {
 }
 
 /// Component status
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ComponentStatus {
     Running,
     Stopped,
@@ -46,12 +56,14 @@ pub enum ComponentStatus {
 }
 
 /// Main component implementation
-pub struct init {
+pub struct Init {
     config: Config,
     status: ComponentStatus,
 }
 
-impl init {
+pub type init = Init;
+
+impl Init {
     pub fn new(config: Config) -> Self {
         Self {
             config,
@@ -61,12 +73,12 @@ impl init {
 
     pub fn from_config_file<P: AsRef<Path>>(path: P) -> Result<Self> {
         let content = std::fs::read_to_string(path)?;
-        let config: Config = serde_json::from_str(&content)?;
+        let config: Config = toml::from_str(&content)?;
         Ok(Self::new(config))
     }
 }
 
-impl Component for init {
+impl Component for Init {
     fn name(&self) -> &str {
         "SigmaOS-init"
     }
@@ -79,14 +91,10 @@ impl Component for init {
         info!("Initializing SigmaOS-init");
         self.status = ComponentStatus::Initializing;
         
-        // Initialize logging
-        if self.config.debug {
-            env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("debug"))
-                .init();
-        } else {
-            env_logger::Builder::from_env(env_logger::Env::default().default_filter_or(&self.config.log_level))
-                .init();
-        }
+        let _ = env_logger::Builder::from_env(
+            env_logger::Env::default().default_filter_or(&self.config.log_level),
+        )
+        .try_init();
         
         info!("Component configuration: {:?}", self.config);
         self.status = ComponentStatus::Stopped;
@@ -115,27 +123,27 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_component_creation() {
+    fn test_component_creation_aaa() {
         let config = Config::default();
-        let component = init::new(config);
+        let component = Init::new(config);
         assert_eq!(component.name(), "SigmaOS-init");
         assert_eq!(component.version(), "0.1.0");
     }
 
     #[test]
-    fn test_initialization() {
-        let mut component = init::new(Config::default());
+    fn test_initialization_aaa() {
+        let mut component = Init::new(Config::default());
         component.initialize().unwrap();
-        assert!(matches!(component.status(), ComponentStatus::Stopped));
+        assert_eq!(component.status(), ComponentStatus::Stopped);
     }
 
     #[test]
-    fn test_start_stop() {
-        let mut component = init::new(Config::default());
+    fn test_start_stop_aaa() {
+        let mut component = Init::new(Config::default());
         component.initialize().unwrap();
         component.start().unwrap();
-        assert!(matches!(component.status(), ComponentStatus::Running));
+        assert_eq!(component.status(), ComponentStatus::Running);
         component.stop().unwrap();
-        assert!(matches!(component.status(), ComponentStatus::Stopped));
+        assert_eq!(component.status(), ComponentStatus::Stopped);
     }
 }
