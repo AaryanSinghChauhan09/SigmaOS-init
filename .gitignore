@@ -1,28 +1,4 @@
-# Rust
-/target/
-**/*.rs.bk
+/target
 Cargo.lock
-
-# IDE
-.idea/
-.vscode/
 *.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Build
-dist/
-build/
-*.o
-*.a
-*.so
-*.dylib
-*.dll
-
-# Logs
-*.log
-target/
+*.bak

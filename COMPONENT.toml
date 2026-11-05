@@ -1,0 +1,16 @@
+[component]
+name = "SigmaOS-init"
+tier = 1
+stability = "scaffold"
+language = "rust"
+description = "Transparent BSD-style PID 1 init process and deterministic rc script execution supervisor"
+upstream = ["https://github.com/chimera-linux/dinit"]
+
+[contract]
+provides = ["pid1-init", "rc-script-runner", "orphan-reaper"]
+depends_on = []
+
+[maturity]
+status = "Scaffold"
+test_evidence = "Compiles and passes AAA unit tests"
+next_milestone = "Hardware and runtime integration"
