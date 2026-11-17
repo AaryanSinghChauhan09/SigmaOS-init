@@ -1,7 +1,7 @@
 [component]
 name = "SigmaOS-init"
 tier = 1
-stability = "scaffold"
+stability = "beta"
 language = "rust"
 description = "An evolving Rust library for system initialization and service/session models. It exposes SigmaInit through the InitSystem alias and includes service state and restart-policy types, systemd-style unit parsing and service structures, login session models, and timesyncd configuration."
 upstream = ["https://github.com/chimera-linux/dinit"]
@@ -11,6 +11,6 @@ provides = ["pid1-init", "rc-script-runner", "orphan-reaper"]
 depends_on = ["SigmaOS-system"]
 
 [maturity]
-status = "Scaffold"
+status = "Implemented"
 test_evidence = "Compiles and passes AAA unit tests"
 next_milestone = "Hardware and runtime integration"
