@@ -3,12 +3,12 @@ name = "SigmaOS-init"
 tier = 1
 stability = "scaffold"
 language = "rust"
-description = "Transparent BSD-style PID 1 init process and deterministic rc script execution supervisor"
+description = "An evolving Rust library for system initialization and service/session models. It exposes SigmaInit through the InitSystem alias and includes service state and restart-policy types, systemd-style unit parsing and service structures, login session models, and timesyncd configuration."
 upstream = ["https://github.com/chimera-linux/dinit"]
 
 [contract]
 provides = ["pid1-init", "rc-script-runner", "orphan-reaper"]
-depends_on = []
+depends_on = ["SigmaOS-system"]
 
 [maturity]
 status = "Scaffold"
